@@ -11,7 +11,9 @@ import { BusinessFundingSection } from "@/components/business-funding-section"
 import { HowWeAreDifferentSection } from "@/components/how-we-are-different-section"
 import  TestimonialsSection  from "@/components/testimonials-section"
 import { GrowthMissionSection } from "@/components/growth-mission-section"
+import { ProcessAccordionSection } from "@/components/process-accordion-section"
 import { ResourcesSection } from "@/components/resources-section"
+import { SiteFooter } from "@/components/site-footer"
 const pillTexts = [
   "Small businesses",
   "Startups",
@@ -39,7 +41,9 @@ export default function Page() {
       <HowWeAreDifferentSection />
       <TestimonialsSection />
       <GrowthMissionSection/>
+      <ProcessAccordionSection />
       <ResourcesSection />
+      <SiteFooter />
     </>
   )
 }

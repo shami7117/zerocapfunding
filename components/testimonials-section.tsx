@@ -1,9 +1,9 @@
 "use client"
 
-import { motion, useMotionValue, useTransform, PanInfo } from "framer-motion"
+import { motion, useAnimation } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react"
-import { useState, useRef, useEffect } from "react"
+import { useState, useEffect } from "react"
 
 const testimonials = [
   {
@@ -41,10 +41,7 @@ const testimonials = [
 export default function TestimonialsSection() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const x = useMotionValue(0)
-  const cardWidth = 400
-  const gap = 24
+  const controls = useAnimation()
 
   // Check if mobile on mount and window resize
   useEffect(() => {
@@ -54,68 +51,71 @@ export default function TestimonialsSection() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  const scrollToIndex = (index: number) => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTo({
-        left: index * (cardWidth + gap),
-        behavior: "smooth",
-      })
+  // Desktop marquee animation
+  useEffect(() => {
+    if (!isMobile) {
+      const startAnimation = async () => {
+        await controls.start({
+          x: [0, -2400], // Adjust based on total width of cards
+          transition: {
+            duration: 20,
+            ease: "linear",
+            repeat: Infinity,
+          }
+        })
+      }
+      startAnimation()
     }
-    setCurrentIndex(index)
-  }
+  }, [controls, isMobile])
 
   const nextSlide = () => {
-    const newIndex = (currentIndex + 1) % testimonials.length
-    setCurrentIndex(newIndex)
-    if (!isMobile) {
-      scrollToIndex(newIndex)
-    }
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length)
   }
 
   const prevSlide = () => {
-    const newIndex = currentIndex === 0 ? testimonials.length - 1 : currentIndex - 1
-    setCurrentIndex(newIndex)
-    if (!isMobile) {
-      scrollToIndex(newIndex)
-    }
+    setCurrentIndex((prevIndex) => 
+      prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1
+    )
   }
 
-  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    const offset = info.offset.x
-    const velocity = info.velocity.x
-    
-    // Threshold for swipe detection
-    const threshold = 50
-    
-    if (Math.abs(offset) > threshold || Math.abs(velocity) > 500) {
-      if (offset > 0 || velocity > 0) {
-        prevSlide()
-      } else {
-        nextSlide()
-      }
-    }
-  }
-
-  const handleDesktopDrag = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    if (scrollRef.current) {
-      const currentScroll = scrollRef.current.scrollLeft
-      const newScroll = currentScroll - info.delta.x
-      scrollRef.current.scrollLeft = newScroll
-    }
-  }
+  const TestimonialCard = ({ testimonial, index }: { testimonial: any; index: number }) => (
+    <motion.div 
+      key={index} 
+      className="w-[389px] h-[522px] flex-shrink-0 rounded-2xl bg-[#001C53] p-6 text-white mx-3"
+    >
+      <div className="mb-4 flex justify-between items-center gap-2">
+        <h3 className="font-bold text-[22px] font-montserrat">{testimonial.name}</h3>
+        {testimonial.verified && (
+          <motion.div 
+            className="flex items-center bg-[#D9D9D924] p-1 rounded-[100px] gap-1"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.3, type: "spring" }}
+          >
+            <CheckCircle className="h-4 w-4 text-[#39BF00]" />
+            <span className="text-[12px] text-[#39BF00] font-montserrat">Verified</span>
+          </motion.div>
+        )}
+      </div>
+      <p className="mb-6 text-sm leading-relaxed font-montserrat">{testimonial.text}</p>
+      <Button className="rounded-full bg-[#39BF00] px-6 py-2 text-sm font-semibold text-white hover:bg-[#2ea600] font-montserrat transition-all duration-300 hover:shadow-lg hover:shadow-[#39BF00]/25">
+        Continue Reading
+      </Button>
+    </motion.div>
+  )
 
   return (
-    <section className="bg-white py-12">
-      <div className="mx-auto max-w-[1350px] px-6">
+    <section className="bg-white font-montserrat py-12 overflow-hidden">
+      <div className="mx-auto w-full">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           viewport={{ once: true }}
-          className="mb-12 text-center md:text-left"
+          className="mb-12 mx-auto max-w-[1350px] px-6 text-center md:text-left"
         >
-          <h2 className="text-3xl font-bold text-[#001C53] md:text-4xl lg:text-5xl font-[Montserrat]">
+          <h2 className="text-3xl font-bold text-[#001C53] md:text-4xl lg:text-5xl font-montserrat">
             Trusted by 300+
             <br />
             Entrepreneurs $45M+ in 0%
@@ -124,156 +124,127 @@ export default function TestimonialsSection() {
           </h2>
         </motion.div>
 
-        {/* Desktop: Horizontal scroll with drag */}
+        {/* Desktop: Custom Marquee with Framer Motion */}
         <div className="hidden md:block">
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.4 }}
             viewport={{ once: true }}
-            ref={scrollRef}
-            className="flex gap-6 overflow-x-auto scrollbar-hide pb-4 cursor-grab active:cursor-grabbing select-none"
-            style={{
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-              WebkitOverflowScrolling: "touch",
-            }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            onDrag={handleDesktopDrag}
-            whileDrag={{ cursor: "grabbing" }}
+            className="overflow-hidden"
           >
-            {testimonials.map((testimonial, index) => (
-              <motion.div 
-                key={index} 
-                className="w-[389px] h-[522px] flex-shrink-0 rounded-2xl bg-[#001C53] p-6 text-white"
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              >
-                <div className="mb-4 flex justify-between items-center gap-2">
-                  <h3 className="font-bold text-[22px] font-[Montserrat]">{testimonial.name}</h3>
-                  {testimonial.verified && (
-                    <div className="flex items-center bg-[#D9D9D924] p-1 rounded-[100px] gap-1">
-                      <CheckCircle className="h-4 w-4 text-[#39BF00]" />
-                      <span className="text-[12px] text-[#39BF00] font-[Montserrat]">Verified</span>
-                    </div>
-                  )}
-                </div>
-                <p className="mb-6 text-sm leading-relaxed font-[Montserrat]">{testimonial.text}</p>
-                <Button className="rounded-full bg-[#39BF00] px-6 py-2 text-sm font-semibold text-white hover:bg-[#2ea600] font-[Montserrat] transition-colors">
-                  Continue Reading
-                </Button>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Desktop Navigation Controls */}
-          <div className="mt-8 flex items-center justify-between">
-            <div className="flex gap-2">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => scrollToIndex(index)}
-                  className={`h-2 w-8 rounded-full transition-colors ${
-                    Math.floor(currentIndex) === index ? "bg-[#39BF00]" : "bg-gray-300"
-                  }`}
-                  aria-label={`Go to testimonial ${index + 1}`}
-                />
+            <motion.div 
+              className="flex items-center py-4"
+              animate={controls}
+            >
+              {/* Triple the testimonials for seamless infinite scroll */}
+              {testimonials.concat(testimonials).concat(testimonials).map((testimonial, index) => (
+                <TestimonialCard key={index} testimonial={testimonial} index={index} />
               ))}
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={prevSlide}
-                className="rounded-full bg-gray-100 p-3 text-[#001C53] hover:bg-gray-200 transition-colors"
-                aria-label="Previous testimonial"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
-              <button
-                onClick={nextSlide}
-                className="rounded-full bg-[#39BF00] p-3 text-white hover:bg-[#2ea600] transition-colors"
-                aria-label="Next testimonial"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
 
-        {/* Mobile: Swipeable single card */}
+        {/* Mobile: Single card with navigation */}
         <div className="md:hidden">
-          <div className="relative overflow-hidden">
+          <div className="relative">
             <motion.div
-              className="flex"
-              animate={{ x: `-${currentIndex * 100}%` }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              drag="x"
-              dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0.2}
-              onDragEnd={handleDragEnd}
+              key={currentIndex}
+              initial={{ opacity: 0, x: 300, scale: 0.8 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: -300, scale: 0.8 }}
+              transition={{ 
+                type: "spring", 
+                stiffness: 300, 
+                damping: 30,
+                opacity: { duration: 0.2 }
+              }}
+              className="px-2"
             >
-              {testimonials.map((testimonial, index) => (
-                <motion.div
-                  key={index}
-                  className="w-full flex-shrink-0 px-2"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="rounded-2xl bg-[#001C53] p-6 text-white">
-                    <div className="mb-4 flex items-center gap-2">
-                      <h3 className="font-semibold text-lg font-[Montserrat]">{testimonial.name}</h3>
-                      {testimonial.verified && (
-                        <div className="flex items-center gap-1">
-                          <CheckCircle className="h-4 w-4 text-[#39BF00]" />
-                          <span className="text-sm text-[#39BF00] font-[Montserrat]">Verified</span>
-                        </div>
-                      )}
-                    </div>
-                    <p className="mb-6 text-sm leading-relaxed font-[Montserrat]">{testimonial.text}</p>
-                    <Button className="rounded-full bg-[#39BF00] px-6 py-2 text-sm font-semibold text-white hover:bg-[#2ea600] font-[Montserrat] transition-colors">
+              <div className="rounded-2xl bg-[#001C53] p-6 text-white relative overflow-hidden">
+                {/* Background gradient effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#001C53] via-[#002B7A] to-[#001C53] opacity-50" />
+                
+                <div className="relative z-10">
+                  <div className="mb-4 flex items-center gap-2">
+                    <h3 className="font-semibold text-lg font-montserrat">{testimonials[currentIndex].name}</h3>
+                    {testimonials[currentIndex].verified && (
+                      <motion.div 
+                        className="flex items-center bg-[#D9D9D924] p-1 rounded-[100px] gap-1"
+                        initial={{ scale: 0, rotate: -180 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{ delay: 0.3, type: "spring" }}
+                      >
+                        <CheckCircle className="h-4 w-4 text-[#39BF00]" />
+                        <span className="text-sm text-[#39BF00] font-montserrat">Verified</span>
+                      </motion.div>
+                    )}
+                  </div>
+                  <motion.p 
+                    className="mb-6 text-sm leading-relaxed font-montserrat"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4, duration: 0.6 }}
+                  >
+                    {testimonials[currentIndex].text}
+                  </motion.p>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <Button className="rounded-full bg-[#39BF00] px-6 py-2 text-sm font-semibold text-white hover:bg-[#2ea600] font-montserrat transition-all duration-300 hover:shadow-lg hover:shadow-[#39BF00]/25 hover:scale-105">
                       Continue Reading
                     </Button>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                </div>
+              </div>
             </motion.div>
 
             {/* Mobile Navigation arrows */}
             <button
               onClick={prevSlide}
-              className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 transition-colors backdrop-blur-sm"
+              className="absolute left-[-16px]  top-1/2 -translate-y-1/2 rounded-full bg-white/10 backdrop-blur-md p-3 text-white hover:bg-white/20 transition-all duration-300 border border-white/20 z-20"
               aria-label="Previous testimonial"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
             <button
               onClick={nextSlide}
-              className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 transition-colors backdrop-blur-sm"
+              className="absolute right-[-16px] top-1/2 -translate-y-1/2 rounded-full bg-white/10 backdrop-blur-md p-3 text-white hover:bg-white/20 transition-all duration-300 border border-white/20 z-20"
+              aria-label="Next testimonial"
             >
               <ChevronRight className="h-5 w-5" />
             </button>
           </div>
 
           {/* Mobile Dots indicator */}
-          <div className="mt-6 flex justify-center gap-2">
+          <div className="mt-8 flex justify-center gap-3">
             {testimonials.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
-                className={`h-2 w-2 rounded-full transition-colors ${
-                  index === currentIndex ? "bg-[#39BF00]" : "bg-gray-300"
+                className={`relative transition-all duration-300 ${
+                  index === currentIndex ? "w-8 h-3" : "w-3 h-3"
                 }`}
                 aria-label={`Go to testimonial ${index + 1}`}
-              />
+              >
+                <div 
+                  className={`w-full h-full rounded-full transition-all duration-300 ${
+                    index === currentIndex ? "bg-[#39BF00]" : "bg-gray-300"
+                  }`}
+                />
+                {index === currentIndex && (
+                  <motion.div
+                    className="absolute inset-0 rounded-full bg-[#39BF00]/30"
+                    initial={{ scale: 1 }}
+                    animate={{ scale: [1, 1.5, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                )}
+              </button>
             ))}
           </div>
-
-          {/* Swipe indicator */}
-          {/* <div className="mt-4 text-center">
-            <p className="text-sm text-gray-500 font-[Montserrat]">← Swipe to see more reviews →</p>
-          </div> */}
         </div>
       </div>
     </section>
