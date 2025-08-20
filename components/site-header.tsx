@@ -178,7 +178,7 @@ export function SiteHeader() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black/20 z-30 md:hidden"
+            className="fixed inset-0  z-30 md:hidden"
             onClick={toggleMenu}
           />
         )}

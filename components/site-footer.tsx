@@ -84,6 +84,16 @@ export function SiteFooter() {
                     Application
                   </a>
                 </li>
+                <li>
+                  <a href="/privacy-policy" className="text-sm text-[#FFFFFF] hover:text-white transition-colors">
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a href="/terms-and-conditions" className="text-sm text-[#FFFFFF] hover:text-white transition-colors">
+                    Terms and Conditions
+                  </a>
+                </li>
               </ul>
             </div>
           </div>

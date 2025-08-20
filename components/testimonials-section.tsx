@@ -51,14 +51,14 @@ export default function TestimonialsSection() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  // Desktop marquee animation
+  // Desktop marquee animation - SLOWER SPEED
   useEffect(() => {
     if (!isMobile) {
       const startAnimation = async () => {
         await controls.start({
           x: [0, -2400], // Adjust based on total width of cards
           transition: {
-            duration: 20,
+            duration: 60, // Increased from 20 to 40 (50% slower)
             ease: "linear",
             repeat: Infinity,
           }
