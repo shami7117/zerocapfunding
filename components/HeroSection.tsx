@@ -1,4 +1,4 @@
-import { useState, useEffect ,useRef} from 'react';
+import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import MarqueeStrip from './marquee-strip';
@@ -13,115 +13,44 @@ const pillTexts = [
 
 export default function HeroSection() {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-  
+    // Load Vidalytics script directly
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.innerHTML = `
+      (function (v, i, d, a, l, y, t, c, s) {
+        y='_'+d.toLowerCase();c=d+'L';if(!v[d]){v[d]={};}if(!v[c]){v[c]={};}if(!v[y]){v[y]={};}var vl='Loader',vli=v[y][vl],vsl=v[c][vl + 'Script'],vlf=v[c][vl + 'Loaded'],ve='Embed';
+        if (!vsl){vsl=function(u,cb){
+          if(t){cb();return;}s=i.createElement("script");s.type="text/javascript";s.async=1;s.src=u;
+          if(s.readyState){s.onreadystatechange=function(){if(s.readyState==="loaded"||s.readyState=="complete"){s.onreadystatechange=null;vlf=1;cb();}};}else{s.onload=function(){vlf=1;cb();};}
+          i.getElementsByTagName("head")[0].appendChild(s);
+        };}
+        vsl(l+'loader.min.js',function(){if(!vli){var vlc=v[c][vl];vli=new vlc();}vli.loadScript(l+'player.min.js',function(){var vec=v[d][ve];t=new vec();t.run(a);});});
+      })(window, document, 'Vidalytics', 'vidalytics_embed_85_LKud0q04SwH9p', 'https://fast.vidalytics.com/embeds/mTjNBMz0/85_LKud0q04SwH9p/');
+    `;
+    document.head.appendChild(script);
 
-    // Load calendar script
-    const calendarScript = document.createElement('script');
-    calendarScript.src = 'https://link.msgsndr.com/js/form_embed.js';
-    calendarScript.type = 'text/javascript';
-    document.head.appendChild(calendarScript);
-
-    // Try to play video with sound immediately
-    const tryAutoplayWithSound = async () => {
-      if (videoRef.current) {
-        try {
-          // First attempt: try unmuted autoplay directly
-          videoRef.current.muted = false;
-          await videoRef.current.play();
-          console.log('Unmuted autoplay successful');
-        } catch (error) {
-          console.log('Unmuted autoplay failed, trying muted approach:', error);
-          try {
-            // Fallback: start muted and immediately try to unmute
-            videoRef.current.muted = true;
-            await videoRef.current.play();
-            
-            // Immediately pause and try to restart with sound
-            videoRef.current.pause();
-            videoRef.current.currentTime = 0; // Reset to beginning
-            videoRef.current.muted = false;
-            
-            // Try to play with sound immediately
-            await videoRef.current.play();
-            console.log('Restarted with sound successfully');
-          } catch (secondError) {
-            console.log('All autoplay attempts failed:', secondError);
-            // Final fallback: play muted and wait for user interaction
-            if (videoRef.current) {
-              videoRef.current.muted = true;
-              videoRef.current.currentTime = 0;
-              videoRef.current.play().catch(() => {});
-            }
-          }
+    // Simple styling observer
+    const styleVideo = () => {
+      setTimeout(() => {
+        const videoWrapper = document.querySelector('.video-shadow-wrapper') as HTMLElement;
+        if (videoWrapper) {
+          videoWrapper.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.15)';
+          videoWrapper.style.borderRadius = '10px';
+          videoWrapper.style.overflow = 'hidden';
         }
-      }
+      }, 3000);
     };
 
-    // Add click listener to try unmuting on first user interaction
-    const handleFirstInteraction = async () => {
-      if (videoRef.current && videoRef.current.muted) {
-        try {
-          // Pause the video
-          videoRef.current.pause();
-          // Reset to beginning
-          videoRef.current.currentTime = 0;
-          // Unmute
-          videoRef.current.muted = false;
-          // Play with sound from the beginning
-          await videoRef.current.play();
-          console.log('Restarted with sound after user interaction');
-        } catch (error) {
-          console.log('Failed to restart with sound:', error);
-          // If it fails, just unmute without restarting
-          videoRef.current.muted = false;
-        }
-        // Remove the listener after first interaction
-        document.removeEventListener('click', handleFirstInteraction);
-        document.removeEventListener('touchstart', handleFirstInteraction);
-        document.removeEventListener('keydown', handleFirstInteraction);
-      }
-    };
-
-    document.addEventListener('click', handleFirstInteraction);
-    document.addEventListener('touchstart', handleFirstInteraction);
-    document.addEventListener('keydown', handleFirstInteraction);
-
-    // Try autoplay with sound
-    tryAutoplayWithSound();
+    styleVideo();
 
     return () => {
-      // Clean up scripts and event listeners
-      const scripts = document.querySelectorAll('script[src="https://link.msgsndr.com/js/form_embed.js"]');
+      // Clean up
+      const scripts = document.querySelectorAll('script[src*="vidalytics"]');
       scripts.forEach(script => script.remove());
-      document.removeEventListener('click', handleFirstInteraction);
-      document.removeEventListener('touchstart', handleFirstInteraction);
-      document.removeEventListener('keydown', handleFirstInteraction);
     };
   }, []);
-
-  const handleVideoClick = async () => {
-    // Ensure video is unmuted and restart from beginning when user interacts with it
-    if (videoRef.current) {
-      try {
-        const wasPlaying = !videoRef.current.paused;
-        videoRef.current.pause();
-        videoRef.current.currentTime = 0; // Reset to beginning
-        videoRef.current.muted = false;
-        await videoRef.current.play();
-        console.log('Video restarted with sound from click');
-      } catch (error) {
-        console.log('Failed to restart video with sound:', error);
-        // Fallback: just unmute without restarting
-        videoRef.current.muted = false;
-        if (videoRef.current.paused) {
-          videoRef.current.play().catch(() => {});
-        }
-      }
-    }
-  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -133,147 +62,241 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <main className=" bg-white font-[Montserrat]">
-      <SiteHeader />
-      <section className="relative">
-        <div className="mx-auto max-w-[1350px] px-6 pt-8 pb-20 md:pt-12  md:pb-20">
-          <div className="grid items-center gap-5 md:grid-cols-2">
-            {/* Left column: copy */}
-            <div>
-              {/* Animated Pill */}
-              <div className="inline-flex items-center justify-center rounded-full bg-[#39BF00] px-2 md:px-5  shadow-sm overflow-hidden w-full h-auto max-w-[270px] md:max-w-[371px] ">
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={currentTextIndex}
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -20, opacity: 0 }}
-                    transition={{ duration: 0.5, ease: 'easeInOut' }}
-                    className="text-[32px] md:text-[40px] font-semibold text-white whitespace-nowrap"
-                  >
-                    {pillTexts[currentTextIndex]}
-                  </motion.span>
-                </AnimatePresence>
-              </div>
-              {/* Headline */}
-              <h1 className="mt-2 text-[36px] md:leading-[67px] text-left font-bold text-[#0B2B4A] md:text-[60px] ">
-                {"We'll help you get"}
-                <br />
-                <span className="text-[#39BF00]">{"$50K-$250K"}</span>
-                {" with"}
-                <br />
-                {"0% interest funding."}
-              </h1>
-              {/* Social proof */}
-              <div className="mt-2 flex flex-col md:flex-row items-start md:items-center gap-4">
-                <div className="flex -space-x-3">
-                  <Image
-                    src={"/person1.png"}
-                    alt="Happy customer 1"
-                    width={48}
-                    height={48}
-                    className="h-12 w-12 rounded-full border-2 border-white object-cover"
-                  />
-                  <Image
-                    src={"/person2.png"}
-                    alt="Happy customer 2"
-                    width={48}
-                    height={48}
-                    className="h-12 w-12 rounded-full border-2 border-white object-cover"
-                  />
-                  <Image
-                    src={"/person3.png"}
-                    alt="Happy customer 3"
-                    width={48}
-                    height={48}
-                    className="h-12 w-12 rounded-full border-2 border-white object-cover"
-                  />
-                </div>
-                <p className="text-base font-semibold text-[#0B2B4A]">Hundreds of happy customers</p>
-              </div>
-              {/* CTA */}
-              <div className="mt-4 md:mt-8 flex items-center  justify-start">
-                <Button
-                  className="rounded-full bg-[#39BF00] px-7 py-6 text-base font-semibold text-white hover:bg-[#2ead49] shadow-sm"
-                  size="lg"
-                >
-                  Get in touch
-                </Button>
-              </div>
-            </div>
-            {/* Right column: video card */}
-            <div className="mx-auto h-full w-full max-w-[535px]">
-              {/* <div className="rounded-[10px] bg-white shadow-[0_10px_25px_rgba(0,0,0,0.15)]">
-                <Image
-                  src={"/hero.png"}
-                  alt="Founder video thumbnail"
-                  width={1040}
-                  height={600}
-                  className="h-auto w-full rounded-[10px]"
-                  priority
-                />
-              </div> */}
-                <div className="rounded-[10px] bg-white shadow-[0_10px_25px_rgba(0,0,0,0.15)] w-full  mx-auto">
-                  <div className="video-aspect-wrapper">
-                    {/* <div className="video-muted-indicator" id="mutedIndicator">
-                      🔇 Click anywhere to hear audio from start
-                    </div> */}
-                    <video 
-                      ref={videoRef}
-                      className="custom-video"
-                      controls
-                      autoPlay
-                      muted // Start muted to ensure autoplay works
-                      playsInline
-                      preload="metadata"
-                      poster=""
-                      onClick={handleVideoClick}
-                      onLoadedData={() => {
-                        // Show muted indicator initially
-                        const indicator = document.getElementById('mutedIndicator');
-                        if (indicator && videoRef.current?.muted) {
-                          indicator.classList.add('show');
-                          // Hide after 3 seconds
-                          setTimeout(() => {
-                            indicator.classList.remove('show');
-                          }, 3000);
-                        }
-                      }}
-                      onVolumeChange={() => {
-                        // Hide indicator when unmuted
-                        const indicator = document.getElementById('mutedIndicator');
-                        if (indicator && videoRef.current && !videoRef.current.muted) {
-                          indicator.classList.remove('show');
-                        }
-                      }}
-                      style={{
-                        width: '100%',
-                        maxWidth: '700px',
-                        margin: '0 auto',
-                        display: 'block',
-                        borderRadius: '8px'
-                      }}
+    <>
+      <style jsx global>{`
+        /* Video wrapper shadow styles */
+        .video-shadow-wrapper {
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+          border-radius: 10px !important;
+          overflow: hidden !important;
+          background: #000 !important;
+          position: relative !important;
+          width: 100% !important;
+          max-width: 535px !important;
+          margin: 0 auto !important;
+        }
+        
+        /* Video centering styles */
+        .video-container {
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+          width: 100% !important;
+          margin: 0 auto !important;
+        }
+        
+        .AutoPlayBox__wrapper {
+          max-width: 535px !important;
+          display: flex !important;
+          justify-content: center !important;
+          margin: 0 auto !important;
+        }
+        
+        div.Tech__wrapper * {
+          display: flex !important;
+          justify-content: center !important;
+          max-width: 535px !important;
+        }
+        
+        div.Tech__wrapper {
+          margin: 0 auto !important;
+          display: flex !important;
+          justify-content: center !important;
+          max-width: 535px !important;
+        }
+        
+        #vidalytics_embed_85_LKud0q04SwH9p {
+          margin: 0 auto !important;
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+          width: 100% !important;
+          height: 100% !important;
+          border-radius: 10px !important;
+          overflow: hidden !important;
+          max-width: 535px !important;
+        }
+        
+        #vidalytics_embed_85_LKud0q04SwH9p > * {
+          margin: 0 auto !important;
+          border-radius: 10px !important;
+        }
+        
+        /* Additional fallback styles */
+        .vidalytics-wrapper {
+          text-align: center !important;
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+          width: 100% !important;
+          max-width: 535px !important;
+          margin: 0 auto !important;
+        }
+        
+        .vidalytics-wrapper > * {
+          margin: 0 auto !important;
+        }
+        
+        /* Video element styles - comprehensive targeting */
+        .video-shadow-wrapper video,
+        .video-shadow-wrapper iframe,
+        #vidalytics_embed_85_LKud0q04SwH9p video,
+        #vidalytics_embed_85_LKud0q04SwH9p iframe,
+        #vidalytics_embed_85_LKud0q04SwH9p div[style*="background"],
+        #vidalytics_embed_85_LKud0q04SwH9p > div,
+        #vidalytics_embed_85_LKud0q04SwH9p > div > div,
+        #vidalytics_embed_85_LKud0q04SwH9p > div > div > div,
+        .vidalytics-wrapper > div,
+        .vidalytics-wrapper > div > div,
+        [id^="vidalytics_"] video,
+        [id^="vidalytics_"] iframe,
+        [class*="vidalytics"] video,
+        [class*="vidalytics"] iframe,
+        [class*="video"] video,
+        [class*="video"] iframe,
+        [class*="player"] video,
+        [class*="player"] iframe {
+          border-radius: 10px !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+        
+        /* Ensure the wrapper takes precedence for shadow */
+        .video-shadow-wrapper {
+          position: relative !important;
+          z-index: 1 !important;
+        }
+        
+        /* Override for text elements to remove any inherited styles */
+        .video-shadow-wrapper span,
+        .video-shadow-wrapper p,
+        .video-shadow-wrapper h1,
+        .video-shadow-wrapper h2,
+        .video-shadow-wrapper h3,
+        .video-shadow-wrapper h4,
+        .video-shadow-wrapper h5,
+        .video-shadow-wrapper h6,
+        .video-shadow-wrapper button,
+        .video-shadow-wrapper a,
+        #vidalytics_embed_85_LKud0q04SwH9p span,
+        #vidalytics_embed_85_LKud0q04SwH9p p,
+        #vidalytics_embed_85_LKud0q04SwH9p h1,
+        #vidalytics_embed_85_LKud0q04SwH9p h2,
+        #vidalytics_embed_85_LKud0q04SwH9p h3,
+        #vidalytics_embed_85_LKud0q04SwH9p h4,
+        #vidalytics_embed_85_LKud0q04SwH9p h5,
+        #vidalytics_embed_85_LKud0q04SwH9p h6,
+        #vidalytics_embed_85_LKud0q04SwH9p button,
+        #vidalytics_embed_85_LKud0q04SwH9p a {
+          box-shadow: none !important;
+        }
+      `}</style>
+
+      <main className="bg-white font-[Montserrat]">
+        <SiteHeader />
+        <section className="relative">
+          <div className="mx-auto max-w-[1350px] px-6 pt-8 pb-20 md:pt-12 md:pb-20">
+            <div className="grid items-center gap-5 md:grid-cols-2">
+              {/* Left column: copy */}
+              <div>
+                {/* Animated Pill */}
+                <div className="inline-flex items-center justify-center rounded-full bg-[#39BF00] px-2 md:px-5 shadow-sm overflow-hidden w-full h-auto max-w-[270px] md:max-w-[371px]">
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={currentTextIndex}
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: -20, opacity: 0 }}
+                      transition={{ duration: 0.5, ease: 'easeInOut' }}
+                      className="text-[32px] md:text-[40px] font-semibold text-white whitespace-nowrap"
                     >
-                      <source 
-                        src="https://storage.googleapis.com/msgsndr/xlHSgxItOx75weYBw7Sl/media/685eb15b9aefd6eb00987e60.mp4" 
-                        type="video/mp4" 
+                      {pillTexts[currentTextIndex]}
+                    </motion.span>
+                  </AnimatePresence>
+                </div>
+                {/* Headline */}
+                <h1 className="mt-2 text-[36px] md:leading-[67px] text-left font-bold text-[#0B2B4A] md:text-[60px]">
+                  {"We'll help you get"}
+                  <br />
+                  <span className="text-[#39BF00]">{"$50K-$250K"}</span>
+                  {" with"}
+                  <br />
+                  {"0% interest funding."}
+                </h1>
+                {/* Social proof */}
+                <div className="mt-2 flex flex-col md:flex-row items-start md:items-center gap-4">
+                  <div className="flex -space-x-3">
+                    <Image
+                      src={"/person1.png"}
+                      alt="Happy customer 1"
+                      width={48}
+                      height={48}
+                      className="h-12 w-12 rounded-full border-2 border-white object-cover"
+                    />
+                    <Image
+                      src={"/person2.png"}
+                      alt="Happy customer 2"
+                      width={48}
+                      height={48}
+                      className="h-12 w-12 rounded-full border-2 border-white object-cover"
+                    />
+                    <Image
+                      src={"/person3.png"}
+                      alt="Happy customer 3"
+                      width={48}
+                      height={48}
+                      className="h-12 w-12 rounded-full border-2 border-white object-cover"
+                    />
+                  </div>
+                  <p className="text-base font-semibold text-[#0B2B4A]">Hundreds of happy customers</p>
+                </div>
+                {/* CTA */}
+                <div className="mt-4 md:mt-8 flex items-center justify-start">
+                  <Button
+                    className="rounded-full bg-[#39BF00] px-7 py-6 text-base font-semibold text-white hover:bg-[#2ead49] shadow-sm"
+                    size="lg"
+                  >
+                    Get in touch
+                  </Button>
+                </div>
+              </div>
+              {/* Right column: Vidalytics VSL */}
+              <div className="mx-auto h-full w-full max-w-[535px]">
+                <div className="video-container">
+                  <div className="vidalytics-wrapper w-full max-w-[535px] mx-auto">
+                    {/* Outer shadow wrapper */}
+                    <div className="video-shadow-wrapper w-full max-w-[535px] mx-auto">
+                      <div 
+                        id="vidalytics_embed_85_LKud0q04SwH9p" 
+                        style={{
+                          width: '100%',
+                          maxWidth: '535px',
+                          margin: '0 auto',
+                          display: 'block',
+                          position: 'relative',
+                          paddingTop: '56.25%',
+                          textAlign: 'center',
+                          backgroundColor: 'transparent',
+                          borderRadius: '10px',
+                          minHeight: '300px'
+                        }}
                       />
-                      Your browser does not support the video tag.
-                    </video>
+                    </div>
                   </div>
                 </div>
+              </div>
             </div>
           </div>
-        </div>
-        {/* Bottom marquee */}
-        <MarqueeStrip
-          items={[
-            { icon: '💸', text: '0% Interest Rates' },
-            { icon: '📈', text: 'Zero Capital Investment' },
-            { icon: '🚀', text: 'Scale Business' },
-          ]}
-        />
-      </section>
-    </main>
+          {/* Bottom marquee */}
+          <MarqueeStrip
+            items={[
+              { icon: '💸', text: '0% Interest Rates' },
+              { icon: '📈', text: 'Zero Capital Investment' },
+              { icon: '🚀', text: 'Scale Business' },
+            ]}
+          />
+        </section>
+      </main>
+    </>
   );
 }
