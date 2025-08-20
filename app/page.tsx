@@ -35,7 +35,7 @@ export default function Page() {
     return () => clearInterval(interval)
   }, [])
   return (
-    <>
+    <div className="overflow-x-hidden">
       <HeroSection />
       <BusinessFundingSection />
       <HowWeAreDifferentSection />
@@ -44,6 +44,6 @@ export default function Page() {
       <ProcessAccordionSection />
       <ResourcesSection />
       <SiteFooter />
-    </>
+    </div>
   )
 }

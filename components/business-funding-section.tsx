@@ -13,9 +13,9 @@ export function BusinessFundingSection() {
 
 
   return (
-  <section ref={ref} className="bg-white py-16 md:py-24 font-sans">
+  <section ref={ref} className="bg-white py-12 font-sans">
       <div className="mx-auto max-w-[1350px] px-6">
-        <div className="grid items-center gap-5 md:grid-cols-2">
+        <div className="grid items-start gap-5 md:grid-cols-2">
           {/* Left column: Image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}

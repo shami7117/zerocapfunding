@@ -133,7 +133,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-white font-[Montserrat]">
+    <main className=" bg-white font-[Montserrat]">
       <SiteHeader />
       <section className="relative">
         <div className="mx-auto max-w-[1350px] px-6 pt-8 pb-20 md:pt-12  md:pb-20">

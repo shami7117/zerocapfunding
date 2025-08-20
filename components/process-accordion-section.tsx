@@ -44,7 +44,7 @@ export function ProcessAccordionSection() {
   }
 
   return (
-    <section className="bg-[#001C53] py-16 md:py-24">
+    <section className="bg-[#001C53] py-12">
       <div className="mx-auto max-w-[1350px] px-6">
         <div className="grid items-start gap-2 md:grid-cols-2">
           {/* Left side - Accordion */}
