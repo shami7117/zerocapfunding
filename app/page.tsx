@@ -43,7 +43,6 @@ export default function Page() {
       <GrowthMissionSection/>
       <ProcessAccordionSection />
       <ResourcesSection />
-      <SiteFooter />
     </div>
   )
 }

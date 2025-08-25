@@ -53,7 +53,7 @@ export function SiteHeader() {
     { href: "#", label: "How it works?" },
     { href: "#", label: "About Us" },
     { href: "#", label: "Testimonials" },
-    { href: "#", label: "Resources" }
+    { href: "/resource", label: "Resources" }
   ]
 
   return (

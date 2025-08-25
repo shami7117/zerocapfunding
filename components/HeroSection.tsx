@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import MarqueeStrip from './marquee-strip';
-import {SiteHeader} from './site-header';
 import {Button} from './ui/button';
 
 const pillTexts = [
@@ -193,7 +192,6 @@ export default function HeroSection() {
       `}</style>
 
       <main className="bg-white font-[Montserrat]">
-        <SiteHeader />
         <section className="relative">
           <div className="mx-auto max-w-[1350px] px-6 pt-8 pb-20 md:pt-12 md:pb-20">
             <div className="grid items-center gap-5 md:grid-cols-2">
