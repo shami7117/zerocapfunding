@@ -88,7 +88,7 @@ export function SiteHeader() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Button className="rounded-full font-semibold text-[15px] bg-[#39BF00] px-6 py-5 text-white hover:bg-[#2ead49]" size="lg">
+            <Button className="rounded-full font-semibold text-[15px] bg-[#2ead49] px-6 py-5 text-white hover:bg-[#2ead49]" size="lg">
               Get in touch
             </Button>
           </motion.div>
