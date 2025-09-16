@@ -54,6 +54,8 @@ export function HowWeAreDifferentSection() {
             </motion.p>
 
             {/* CTA Button */}
+
+
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -61,12 +63,20 @@ export function HowWeAreDifferentSection() {
               viewport={{ once: true }}
               className="mt-8"
             >
-              <Button
+
+              <a
+    href="https://application.zerocapfunding.com/"
+    // target="_blank"
+    rel="noopener noreferrer"
+  >
+    <Button
                 className="rounded-full bg-[#39BF00] px-8 py-6 text-[24px] font-semibold text-white hover:bg-[#2ea600] shadow-lg font-montserrat"
                 size="lg"
               >
                 Check if you qualify
               </Button>
+  </a>
+             
             </motion.div>
           </motion.div>
 

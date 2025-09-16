@@ -36,12 +36,18 @@ export function GrowthMissionSection() {
               transition={{ duration: 0.6, delay: 0.3 }}
               viewport={{ once: true }}
             >
-              <Button
-                className="rounded-full bg-[#39BF00] px-8 py-6 font-montserrat text-base font-semibold text-white hover:bg-[#2ead49] shadow-lg transition-all duration-300 hover:shadow-xl"
+              <a
+    href="https://application.zerocapfunding.com/"
+    // target="_blank"
+    rel="noopener noreferrer"
+  >
+    <Button
+                className="rounded-full bg-[#39BF00] px-8 py-6 text-[24px] font-semibold text-white hover:bg-[#2ea600] shadow-lg font-montserrat"
                 size="lg"
               >
                 Check if you qualify
               </Button>
+  </a>
             </motion.div>
           </motion.div>
 

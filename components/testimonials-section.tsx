@@ -81,6 +81,7 @@ export default function TestimonialsSection() {
   const TestimonialCard = ({ testimonial, index }: { testimonial: any; index: number }) => (
     <motion.div 
       key={index} 
+
       className="w-[389px] h-[522px] flex-shrink-0 rounded-2xl bg-[#001C53] p-6 text-white mx-3"
     >
       <div className="mb-4 flex justify-between items-center gap-2">
@@ -105,7 +106,7 @@ export default function TestimonialsSection() {
   )
 
   return (
-    <section className="bg-white font-montserrat py-12 overflow-hidden">
+    <section id="reviews" className="bg-white font-montserrat py-12 overflow-hidden">
       <div className="mx-auto w-full">
         {/* Header */}
         <motion.div

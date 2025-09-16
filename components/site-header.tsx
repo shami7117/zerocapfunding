@@ -51,17 +51,17 @@ export function SiteHeader() {
 
   const navItems = [
     { href: "#", label: "How it works?" },
-    { href: "#", label: "About Us" },
-    { href: "#", label: "Testimonials" },
+    { href: "/case-study", label: "Case Study" },
+    { href: "#reviews", label: "Testimonials" },
     { href: "/resource", label: "Resources" }
   ]
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/70">
-      <div className="mx-auto flex h-22 max-w-[1350px] items-center justify-between px-6">
+      <div className="mx-auto flex h-18 max-w-[1350px] items-center justify-between px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 z-50" aria-label="Zerocap Funding Home">
-          <Image alt="logo" src={'/logo.png'} width={200} height={120}/>
+          <Image alt="logo" src={'/logo.png'} width={200} height={80}/>
         </Link>
 
         {/* Desktop Nav */}
@@ -84,14 +84,24 @@ export function SiteHeader() {
 
         {/* Desktop CTA */}
         <div className="hidden md:block">
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Button className="rounded-full font-semibold text-[15px] bg-[#2ead49] px-6 py-5 text-white hover:bg-[#2ead49]" size="lg">
-              Get in touch
-            </Button>
-          </motion.div>
+         <motion.div
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.95 }}
+>
+  <a
+    href="https://application.zerocapfunding.com/"
+    // target="_blank"
+    rel="noopener noreferrer"
+  >
+    <Button
+      className="rounded-full cursor-pointer font-semibold text-[15px] bg-[#39BF00] px-6 py-5 text-white hover:bg-[#2ead49]"
+      size="lg"
+    >
+      Get in touch
+    </Button>
+  </a>
+</motion.div>
+
         </div>
 
         {/* Mobile Hamburger */}

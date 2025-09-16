@@ -2,8 +2,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const CaseStudiesPage: React.FC = () => {
+  const router = useRouter();
   const fadeInUp = {
     initial: { opacity: 0, y: 30 },
     animate: { opacity: 1, y: 0 },
@@ -132,8 +134,10 @@ const CaseStudiesPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {caseStudies.map((study) => (
               <motion.div
+                onClick={() => { router.push(`/case-study/${study.id}`) }}
+
                 key={study.id}
-                className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+                className="bg-white border cursor-pointer border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
                 variants={fadeInUp}
                 whileHover={{ y: -5 }}
               >

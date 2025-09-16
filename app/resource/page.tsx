@@ -1,7 +1,10 @@
+"use client";
 import React from 'react';
 import { Play, ArrowRight, Star, Clock, Users, BookOpen, Award, Video, FileText } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const ResourcesTrainingPage = () => {
+  const router=useRouter();
   // Sample data for resources
   const featuredResources = [
     {
@@ -336,6 +339,7 @@ const ResourcesTrainingPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {resources.map((resource) => (
               <article
+                onClick={() => { router.push(`/resource/${resource.id}`) }}
                 key={resource.id}
                 className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden group cursor-pointer"
               >
@@ -383,7 +387,7 @@ const ResourcesTrainingPage = () => {
         </section>
 
         {/* Access Section */}
-        <section className="bg-white rounded-2xl p-8 shadow-sm">
+        {/* <section className="bg-white rounded-2xl p-8 shadow-sm">
           <div className="text-center max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Access Our Premium (Free)
@@ -399,7 +403,7 @@ const ResourcesTrainingPage = () => {
               No credit card required • Access to 100+ resources • Community support
             </div>
           </div>
-        </section>
+        </section> */}
       </main>
     </div>
   );

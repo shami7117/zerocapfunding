@@ -250,12 +250,19 @@ export default function HeroSection() {
                 </div>
                 {/* CTA */}
                 <div className="mt-4 md:mt-8 flex items-center justify-start">
-                  <Button
-                    className="rounded-full bg-[#39BF00] px-7 py-6 text-base font-semibold text-white hover:bg-[#2ead49] shadow-sm"
+                 
+                     <a
+                        href="https://application.zerocapfunding.com/"
+                        // target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Button
+                          className="rounded-full bg-[#39BF00] px-7 py-6 text-base font-semibold text-white hover:bg-[#2ead49] shadow-sm"
                     size="lg"
-                  >
-                    Get in touch
-                  </Button>
+                        >
+                          Get in touch
+                        </Button>
+                      </a>
                 </div>
               </div>
               {/* Right column: Vidalytics VSL */}

@@ -98,12 +98,18 @@ export function BusinessFundingSection() {
               transition={{ duration: 0.6, ease: "easeOut", type: "tween", delay: 0.8 }}
               className="mt-8"
             >
-              <Button
-                className="rounded-full bg-[#39BF00] px-7 py-6 text-[20px]  leading-[32px] font-semibold text-white hover:bg-[#2ead49] shadow-sm"
-                size="lg"
-              >
-                Get in touch
-              </Button>
+             <a
+    href="https://application.zerocapfunding.com/"
+    // target="_blank"
+    rel="noopener noreferrer"
+  >
+    <Button
+         className="rounded-full bg-[#39BF00] px-7 py-6 text-[20px]  leading-[32px] font-semibold text-white hover:bg-[#2ead49] shadow-sm"
+                    size="lg"
+    >
+      Get in touch
+    </Button>
+  </a>
             </motion.div>
           </motion.div>
         </div>

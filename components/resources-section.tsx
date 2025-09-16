@@ -3,8 +3,10 @@
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 
 export function ResourcesSection() {
+  const router=useRouter();
   const resources = [
     {
       id: 1,
@@ -43,7 +45,7 @@ export function ResourcesSection() {
             Insights & Success Stories
           </h2>
 
-          <Button className="rounded-[100px]  bg-[#39BF00] hover:bg-[#2ead49] text-white px-8 py-6 text-[24px] font-semibold font-montserrat shadow-sm w-fit">
+          <Button onClick={()=>{router.push('/resource')}} className="rounded-[100px]  bg-[#39BF00] hover:bg-[#2ead49] text-white px-8 py-6 text-[24px] font-semibold font-montserrat shadow-sm w-fit">
             Access to all resources
           </Button>
         </motion.div>
