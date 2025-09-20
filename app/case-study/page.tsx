@@ -91,12 +91,19 @@ const CaseStudiesPage: React.FC = () => {
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             variants={fadeInUp}
           >
-            <button className="bg-[#39BF00] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#32a300] transition-colors duration-300 flex items-center gap-2">
+             <a
+    href="https://application.zerocapfunding.com/"
+    // target="_blank"
+    rel="noopener noreferrer"
+  >
+     <button className="bg-[#39BF00] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#32a300] transition-colors duration-300 flex items-center gap-2">
               Apply Now
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
+  </a>
+          
             <button className="border-2 border-gray-300 text-gray-700 px-8 py-3 rounded-full font-semibold hover:border-[#39BF00] hover:text-[#39BF00] transition-colors duration-300">
               See Testimonials
             </button>
@@ -177,57 +184,6 @@ const CaseStudiesPage: React.FC = () => {
         </div>
       </motion.section>
 
-      {/* CTA Section */}
-      <motion.section 
-        className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-900 text-white"
-        variants={fadeInUp}
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true }}
-      >
-        <div className="max-w-4xl mx-auto">
-          <div className="flex flex-col lg:flex-row items-start justify-between gap-8">
-            <div className="flex-1">
-              {/* <div className="text-2xl font-bold mb-2">A</div> */}
-              <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-                Get Started With A Free Consultation
-              </h2>
-              
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold mb-4 text-[#39BF00]">
-                  Access Our AI Business Playbook (Free)
-                </h3>
-                <p className="text-gray-300 mb-6 max-w-md">
-                  Get the exact playbook we used to build our own AI-powered agency. Inside, you'll discover the strategies, 
-                  tools, and workflows that helped us systemize growth.
-                </p>
-                
-                <div className="flex flex-col sm:flex-row gap-4 max-w-md">
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="flex-1 px-4 py-3 rounded-full border-1 border-solid border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#39BF00]"
-                  />
-                  <button className="bg-[#39BF00] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#32a300] transition-colors duration-300">
-                    Get access
-                  </button>
-                </div>
-              </div>
-            </div>
-            
-            <div className="lg:ml-8">
-              <button className="bg-[#39BF00] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#32a300] transition-colors duration-300 flex items-center gap-2">
-                Apply Now
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-          </div>
-          
-         
-        </div>
-      </motion.section>
     </div>
   );
 };

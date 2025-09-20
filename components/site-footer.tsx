@@ -12,9 +12,15 @@ export function SiteFooter() {
             <br />
             you qualify for?
           </h2>
-          <button className="rounded-[100px] bg-[#39BF00] px-8 py-2 text-[24px] font-semibold text-white hover:bg-[#2ead49] shadow-sm">
-            Start application
-          </button>
+         <a
+  href="https://application.zerocapfunding.com/"
+  // target="_blank"
+  rel="noopener noreferrer"
+  className="rounded-[100px] bg-[#39BF00] px-8 py-2 text-[24px] font-semibold text-white hover:bg-[#2ead49] shadow-sm inline-block"
+>
+  Start application
+</a>
+
         </div>
       </div>
 

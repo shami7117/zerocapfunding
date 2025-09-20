@@ -60,6 +60,28 @@ export default function HeroSection() {
     return () => clearInterval(interval);
   }, []);
 
+  // Animation variants for vertical rotation
+  const pillVariants = {
+    initial: (direction: number) => ({
+      y: direction > 0 ? 100 : -100,
+      opacity: 0,
+      rotateX: direction > 0 ? 90 : -90,
+      scale: 0.8,
+    }),
+    animate: {
+      y: 0,
+      opacity: 1,
+      rotateX: 0,
+      scale: 1,
+    },
+    exit: (direction: number) => ({
+      y: direction > 0 ? -100 : 100,
+      opacity: 0,
+      rotateX: direction > 0 ? -90 : 90,
+      scale: 0.8,
+    }),
+  };
+
   return (
     <>
       <style jsx global>{`
@@ -197,21 +219,36 @@ export default function HeroSection() {
             <div className="grid items-center gap-5 md:grid-cols-2">
               {/* Left column: copy */}
               <div>
-                {/* Animated Pill */}
-                <div className="inline-flex items-center justify-center rounded-full bg-[#39BF00] px-2 md:px-5 shadow-sm overflow-hidden w-full h-auto max-w-[270px] md:max-w-[371px]">
-                  <AnimatePresence mode="wait">
-                    <motion.span
+                {/* Animated Pill Container */}
+                <div className="relative flex items-center justify-start w-full h-auto max-w-[270px] md:max-w-[371px] mb-2" style={{ height: '60px' }}>
+                  <AnimatePresence mode="wait" custom={currentTextIndex}>
+                    <motion.div
                       key={currentTextIndex}
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      exit={{ y: -20, opacity: 0 }}
-                      transition={{ duration: 0.5, ease: 'easeInOut' }}
-                      className="text-[32px] md:text-[40px] font-semibold text-white whitespace-nowrap"
+                      custom={currentTextIndex % 2 === 0 ? 1 : -1}
+                      variants={pillVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      transition={{ 
+                        duration: 0.7, 
+                        ease: [0.23, 1, 0.32, 1],
+                        type: "spring",
+                        damping: 20,
+                        stiffness: 100
+                      }}
+                      className="absolute inset-0 flex items-center justify-center rounded-full bg-[#39BF00] px-2 md:px-5 shadow-sm"
+                      style={{
+                        transformStyle: 'preserve-3d',
+                        backfaceVisibility: 'hidden'
+                      }}
                     >
-                      {pillTexts[currentTextIndex]}
-                    </motion.span>
+                      <span className="text-[32px] md:text-[40px] font-semibold text-white whitespace-nowrap">
+                        {pillTexts[currentTextIndex]}
+                      </span>
+                    </motion.div>
                   </AnimatePresence>
                 </div>
+
                 {/* Headline */}
                 <h1 className="mt-2 text-[36px] md:leading-[67px] text-left font-bold text-[#0B2B4A] md:text-[60px]">
                   {"We'll help you get"}

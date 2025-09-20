@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function PrivacyPolicyPage() {
   return (
     <div className="min-h-screen bg-white">
-      <SiteHeader />
+      {/* <SiteHeader /> */}
       <div className="max-w-4xl mx-auto px-6 py-16">
         <div className="prose prose-lg max-w-none">
           <h1 className="text-4xl font-bold text-gray-900 mb-2 font-montserrat">PRIVACY STATEMENT</h1>
@@ -260,7 +260,7 @@ export default function PrivacyPolicyPage() {
           </div>
         </div>
       </div>
-      <SiteFooter />
+      {/* <SiteFooter /> */}
     </div>
   )
 }
