@@ -221,7 +221,7 @@ export default function HeroSection() {
               {/* Left column: copy */}
               <div>
                 {/* Animated Pill Container */}
-                <div className="relative flex items-center justify-start w-full h-auto max-w-[270px] md:max-w-[371px] mb-2" style={{ height: '60px' }}>
+                <div className="relative flex items-center justify-start w-full h-auto max-w-full md:max-w-[371px] mb-2" style={{ height: '60px' }}>
                   <AnimatePresence mode="wait" custom={currentTextIndex}>
                     <motion.div
                       key={currentTextIndex}
@@ -243,7 +243,7 @@ export default function HeroSection() {
                         backfaceVisibility: 'hidden'
                       }}
                     >
-                      <span className="text-[32px] md:text-[40px] font-semibold text-white whitespace-nowrap">
+                      <span className="text-[25px] md:text-[40px] font-semibold text-white whitespace-nowrap">
                         {pillTexts[currentTextIndex]}
                       </span>
                     </motion.div>

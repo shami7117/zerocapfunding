@@ -136,7 +136,7 @@ export function SiteHeader() {
             animate="open"
             exit="closed"
             // variants={menuVariants}
-            className="md:hidden bg-white/95 backdrop-blur-sm border-t border-gray-100 overflow-hidden"
+            className="md:hidden bg-white/95 backdrop-blur-sm border-t border-gray-100 overflow-hidden relative z-30"
           >
             <nav className="px-6 py-4 space-y-4">
               {navItems.map((item, index) => (
@@ -167,13 +167,19 @@ export function SiteHeader() {
                 exit="closed"
                 className="pt-4"
               >
-                <Button 
-                  className="w-full rounded-full font-semibold text-[15px] bg-[#39BF00] px-6 py-5 text-white hover:bg-[#2ead49]" 
-                  size="lg"
+                <a
+                  href="https://application.zerocapfunding.com/"
+                  rel="noopener noreferrer"
+                  className="block"
                   onClick={toggleMenu}
                 >
-                  Get in touch
-                </Button>
+                  <Button 
+                    className="w-full rounded-full font-semibold text-[15px] bg-[#39BF00] px-6 py-5 text-white hover:bg-[#2ead49]" 
+                    size="lg"
+                  >
+                    Get in touch
+                  </Button>
+                </a>
               </motion.div>
             </nav>
           </motion.div>
@@ -188,7 +194,7 @@ export function SiteHeader() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0  z-30 md:hidden"
+            className="fixed inset-0 z-20 md:hidden"
             onClick={toggleMenu}
           />
         )}
