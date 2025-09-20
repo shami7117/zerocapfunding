@@ -5,9 +5,10 @@ import MarqueeStrip from './marquee-strip';
 import {Button} from './ui/button';
 
 const pillTexts = [
-  'Fast Approval',
-  'No Collateral',
-  'Flexible Terms',
+  'Agency Owners',
+  'Coaches',
+  'E-com store owners',
+  'Real estate investors',
 ];
 
 export default function HeroSection() {
