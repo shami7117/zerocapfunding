@@ -58,10 +58,10 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/70">
-      <div className="mx-auto flex h-18 max-w-[1350px] items-center justify-between px-6">
+      <div className="mx-auto flex py-5 max-w-[1350px] items-center justify-between px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 z-50" aria-label="Zerocap Funding Home">
-          <Image alt="logo" src={'/logo.png'} width={200} height={80}/>
+          <Image alt="logo" src={'/logo.svg'} width={233} height={44}/>
         </Link>
 
         {/* Desktop Nav */}
